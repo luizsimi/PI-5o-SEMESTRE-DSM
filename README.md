@@ -1,6 +1,36 @@
 # PI-5o-SEMESTRE-DSM
 Plataforma pare gestão de serviços de manutenção de automóveis :
+Projeto com frontend Flutter e backend NestJS (Node.js)
 
+Estrutura
+- `frontend/`: Aplicação Flutter criada com `flutter create`
+- `backend/`: API NestJS criada com `npx @nestjs/cli new`
+
+Pré-requisitos
+- Flutter SDK instalado e configurado (`flutter --version`)
+- Node.js (v22+) e npm (`node -v`, `npm -v`)
+
+Documentação oficial (mais recente)
+- Flutter: https://docs.flutter.dev/
+- NestJS: https://docs.nestjs.com/
+- Node.js: https://nodejs.org/en/docs
+
+Configuração e execução
+
+Frontend (Flutter)
+1. `cd frontend`
+2. `flutter pub get`
+3. `flutter run`
+
+Backend (NestJS)
+1. `cd backend`
+2. `npm install`
+3. Desenvolvimento: `npm run start` (ou Hot-Reload: `npm run start:dev`)
+4. Testes: `npm test`
+
+Observações
+- Para executar o Flutter em dispositivos/simuladores, verifique `flutter doctor`.
+- Ajuste variáveis de ambiente do backend conforme necessário (por exemplo, porta `process.env.PORT`).
 
     A ideia é a construção de uma plataforma de gestão de manutenção que 
     informe ao cliente o status do serviço, realize o orçamento e auxilie
@@ -10,7 +40,7 @@ Plataforma pare gestão de serviços de manutenção de automóveis :
 
 Ferramentas :
 
-    Linguagem Dart = Tratativas simples com código limpo e legível para velocidade, 
+    Linguagem Dart = Tratativas simples com cyódigo limpo e legível para velocidade, 
     melhor legibilidade e manutenção de código 
 
     Framework Flutter = Construção da interface mobile de maneira responsiva e limpa, 
