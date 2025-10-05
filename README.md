@@ -1,24 +1,140 @@
-# PI-5o-SEMESTRE-DSM
-Plataforma pare gestão de serviços de manutenção de automóveis :
+# Projeto Mobile App - Flutter + NestJS
 
+Este projeto consiste em uma aplicação mobile desenvolvida com Flutter para o frontend e NestJS com TypeORM para o backend.
 
-    A ideia é a construção de uma plataforma de gestão de manutenção que 
-    informe ao cliente o status do serviço, realize o orçamento e auxilie
-    O manutentor na comunicação clara entre ele o cliente, 
-    Além da facilidade em registrar checklists e poder se
-    lembrar das necessidades do cliente e a ordem de serviço.
+## Estrutura do Projeto
 
-Ferramentas :
+```
+├── frontend/          # Aplicação Flutter
+│   ├── lib/
+│   │   ├── screens/   # Telas da aplicação
+│   │   ├── services/  # Serviços para comunicação com API
+│   │   ├── models/    # Modelos de dados
+│   │   ├── utils/     # Utilitários e helpers
+│   │   └── widgets/   # Componentes reutilizáveis
+│   └── pubspec.yaml   # Dependências Flutter
+│
+└── backend/           # API NestJS
+    ├── src/
+    │   ├── modules/   # Módulos da aplicação
+    │   ├── common/    # Código compartilhado
+    │   ├── config/    # Configurações
+    │   └── database/  # Configurações de banco
+    ├── .env           # Variáveis de ambiente
+    └── package.json   # Dependências Node.js
+```
 
-    Linguagem Dart = Tratativas simples com código limpo e legível para velocidade, 
-    melhor legibilidade e manutenção de código 
+## Tecnologias Utilizadas
 
-    Framework Flutter = Construção da interface mobile de maneira responsiva e limpa, 
-    U.I mais simples e interativa para fácil acesso do usuário.
+### Frontend (Flutter)
+- **Flutter SDK**: Framework para desenvolvimento mobile
+- **HTTP**: Cliente para requisições API
+- **Provider**: Gerenciamento de estado
+- **SharedPreferences**: Armazenamento local
+- **GoRouter**: Navegação
+- **JSON Annotation**: Serialização JSON
 
-    Banco de dados Postgrees = Para Queries e tratativas de dados mais
-    legíveis devido ao suporte á JSON e tipos de dados mais flexiveís.
+### Backend (NestJS)
+- **NestJS**: Framework Node.js
+- **TypeORM**: ORM para banco de dados
+- **MySQL**: Banco de dados
+- **Class Validator**: Validação de dados
+- **Class Transformer**: Transformação de dados
 
-    API Própria = Para registro de modelos de carro para puxada simples
+## Configuração do Ambiente
 
-    Kanban = Para gestão do projeto e Sprints do desenvolvimento do grupo.
+### Pré-requisitos
+- Flutter SDK (versão mais recente)
+- Node.js (versão 18+)
+- MySQL Server
+- Git
+
+### Backend Setup
+
+1. Navegue para a pasta do backend:
+```bash
+cd backend
+```
+
+2. Instale as dependências:
+```bash
+npm install
+```
+
+3. Configure o banco de dados:
+   - Copie `.env.example` para `.env`
+   - Configure as credenciais do MySQL no arquivo `.env`
+
+4. Execute o servidor:
+```bash
+npm run start:dev
+```
+
+O servidor estará rodando em `http://localhost:3000`
+
+### Frontend Setup
+
+1. Navegue para a pasta do frontend:
+```bash
+cd frontend
+```
+
+2. Instale as dependências:
+```bash
+flutter pub get
+```
+
+3. Execute a aplicação:
+```bash
+flutter run
+```
+
+## Scripts Disponíveis
+
+### Backend
+- `npm run start`: Inicia o servidor em produção
+- `npm run start:dev`: Inicia o servidor em modo desenvolvimento
+- `npm run build`: Compila o projeto
+- `npm run test`: Executa os testes
+
+### Frontend
+- `flutter run`: Executa a aplicação
+- `flutter build`: Compila a aplicação
+- `flutter test`: Executa os testes
+- `flutter pub get`: Instala dependências
+
+## Configuração do Banco de Dados
+
+O projeto está configurado para usar MySQL. As configurações padrão são:
+
+- Host: localhost
+- Porta: 3306
+- Usuário: root
+- Senha: (vazia)
+- Database: app_database
+
+Modifique o arquivo `.env` no backend para alterar essas configurações.
+
+## Desenvolvimento
+
+### Estrutura de Desenvolvimento
+- O backend roda na porta 3000
+- O frontend se conecta ao backend via HTTP
+- CORS está configurado para permitir requisições do frontend
+- Validação global está habilitada no backend
+- TypeORM está configurado com sincronização automática em desenvolvimento
+
+### Próximos Passos
+1. Implementar autenticação JWT
+2. Criar módulos específicos da aplicação
+3. Desenvolver telas do Flutter
+4. Implementar testes unitários e de integração
+5. Configurar CI/CD
+
+## Contribuição
+
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
