@@ -1,0 +1,21 @@
+<svg width="400" height="800" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fundo escuro com gradiente -->
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#000000;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#222222;stop-opacity:0.9" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Fundo principal -->
+  <rect width="100%" height="100%" fill="url(#bg-gradient)" />
+  
+  <!-- Imagem de fundo estilo automotivo -->
+  <rect width="100%" height="100%" fill="url(#bg-gradient)" opacity="0.8" />
+  
+  <!-- Elementos decorativos que simulam peças de motor -->
+  <circle cx="50" cy="200" r="30" fill="#333333" opacity="0.5" />
+  <circle cx="350" cy="600" r="40" fill="#444444" opacity="0.4" />
+  <rect x="100" y="300" width="200" height="5" fill="#555555" opacity="0.3" transform="rotate(45, 200, 300)" />
+  <rect x="150" y="500" width="150" height="3" fill="#666666" opacity="0.3" transform="rotate(-30, 225, 500)" />
+</svg>
