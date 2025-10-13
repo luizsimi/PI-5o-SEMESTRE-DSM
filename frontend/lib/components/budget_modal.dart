@@ -16,12 +16,13 @@ class _BudgetModalState extends State<BudgetModal> {
   final TextEditingController _vehicleModelController = TextEditingController();
   final TextEditingController _plateController = TextEditingController();
   final TextEditingController _serviceDescriptionController = TextEditingController();
-  final TextEditingController _partNameController = TextEditingController();
-  final TextEditingController _partValueController = TextEditingController();
   final TextEditingController _serviceValueController = TextEditingController();
   final TextEditingController _totalValueController = TextEditingController();
 
   String _selectedServiceType = 'DADOS';
+  
+  // Lista de peças dinâmica
+  List<Map<String, TextEditingController>> _partsList = [];
 
   @override
   void dispose() {
@@ -30,17 +31,48 @@ class _BudgetModalState extends State<BudgetModal> {
     _vehicleModelController.dispose();
     _plateController.dispose();
     _serviceDescriptionController.dispose();
-    _partNameController.dispose();
-    _partValueController.dispose();
     _serviceValueController.dispose();
     _totalValueController.dispose();
+    
+    // Dispose dos controllers das peças
+    for (var part in _partsList) {
+      part['name']?.dispose();
+      part['value']?.dispose();
+    }
+    
     super.dispose();
   }
 
+  void _addPart() {
+    setState(() {
+      _partsList.add({
+        'name': TextEditingController(),
+        'value': TextEditingController(),
+      });
+    });
+  }
+
+  void _removePart(int index) {
+    setState(() {
+      _partsList[index]['name']?.dispose();
+      _partsList[index]['value']?.dispose();
+      _partsList.removeAt(index);
+    });
+    _calculateTotal();
+  }
+
   void _calculateTotal() {
-    double partValue = double.tryParse(_partValueController.text.replaceAll('R\$', '').replaceAll(',', '.')) ?? 0.0;
+    double totalPartsValue = 0.0;
+    
+    // Somar valores de todas as peças
+    for (var part in _partsList) {
+      String valueText = part['value']?.text ?? '';
+      double partValue = double.tryParse(valueText.replaceAll('R\$', '').replaceAll(',', '.')) ?? 0.0;
+      totalPartsValue += partValue;
+    }
+    
     double serviceValue = double.tryParse(_serviceValueController.text.replaceAll('R\$', '').replaceAll(',', '.')) ?? 0.0;
-    double total = partValue + serviceValue;
+    double total = totalPartsValue + serviceValue;
     _totalValueController.text = 'R\$ ${total.toStringAsFixed(2).replaceAll('.', ',')}';
   }
 
@@ -254,18 +286,80 @@ class _BudgetModalState extends State<BudgetModal> {
                               maxLines: 3,
                             ),
                           ] else if (_selectedServiceType == 'PEÇAS') ...[
-                            // Campos de peças
-                            CustomTextField(
-                              label: 'Nome da Peça',
-                              controller: _partNameController,
-                            ),
-                            const SizedBox(height: 20),
+                            // Lista dinâmica de cards de peças
+                            ..._partsList.asMap().entries.map((entry) {
+                              int index = entry.key;
+                              Map<String, TextEditingController> part = entry.value;
+                              
+                              return Container(
+                                margin: const EdgeInsets.only(bottom: 16),
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[50],
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: Colors.grey[300]!),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Peça ${index + 1}',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        if (_partsList.length > 1)
+                                          IconButton(
+                                            onPressed: () => _removePart(index),
+                                            icon: const Icon(
+                                              Icons.delete_outline,
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 12),
+                                    CustomTextField(
+                                      label: 'Nome da Peça',
+                                      controller: part['name']!,
+                                    ),
+                                    const SizedBox(height: 12),
+                                    CustomTextField(
+                                      label: 'Valor da Peça',
+                                      controller: part['value']!,
+                                      keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                      onChanged: (value) => _calculateTotal(),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
                             
-                            CustomTextField(
-                              label: 'Valor da Peça',
-                              controller: _partValueController,
-                              keyboardType: TextInputType.numberWithOptions(decimal: true),
-                              onChanged: (value) => _calculateTotal(),
+                            // Botão Adicionar Item
+                            Container(
+                              width: double.infinity,
+                              margin: const EdgeInsets.only(bottom: 20),
+                              child: ElevatedButton.icon(
+                                onPressed: _addPart,
+                                icon: const Icon(Icons.add, color: Colors.white),
+                                label: const Text(
+                                  'Adicionar Item',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.black,
+                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                              ),
                             ),
                           ] else if (_selectedServiceType == 'SERVIÇOS') ...[
                             // Campos de serviços
