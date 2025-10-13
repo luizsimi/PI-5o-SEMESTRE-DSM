@@ -23,7 +23,7 @@ class _MeusDadosScreenState extends State<MeusDadosScreen> {
       backgroundColor: Colors.grey[100],
       appBar: const CustomAppBar(
         title: 'MEUS DADOS',
-        showBackButton: true,
+        showBackButton: false,
         showLogo: true,
       ),
       body: SingleChildScrollView(

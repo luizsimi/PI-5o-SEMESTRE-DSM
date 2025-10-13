@@ -278,13 +278,6 @@ class _BudgetModalState extends State<BudgetModal> {
                               label: 'Placa',
                               controller: _plateController,
                             ),
-                            const SizedBox(height: 20),
-                            
-                            CustomTextField(
-                              label: 'Descrição do Serviço',
-                              controller: _serviceDescriptionController,
-                              maxLines: 3,
-                            ),
                           ] else if (_selectedServiceType == 'PEÇAS') ...[
                             // Lista dinâmica de cards de peças
                             ..._partsList.asMap().entries.map((entry) {
@@ -363,6 +356,12 @@ class _BudgetModalState extends State<BudgetModal> {
                             ),
                           ] else if (_selectedServiceType == 'SERVIÇOS') ...[
                             // Campos de serviços
+                            CustomTextField(
+                              label: 'Digite qual tipo de serviço',
+                              controller: _serviceDescriptionController,
+                            ),
+                            const SizedBox(height: 20),
+                            
                             CustomTextField(
                               label: 'Valor do Serviço',
                               controller: _serviceValueController,

@@ -81,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Colors.grey[100],
       appBar: const CustomAppBar(
         title: 'SERVIÇOS',
-        showBackButton: true,
+        showBackButton: false,
       ),
       body: Column(
         children: [
