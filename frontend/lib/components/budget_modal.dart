@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../components/custom_text_field.dart';
+import '../components/confirmation_modal.dart';
 
 class BudgetModal extends StatefulWidget {
   const BudgetModal({super.key});
@@ -79,8 +80,17 @@ class _BudgetModalState extends State<BudgetModal> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
+                  onTap: () async {
+                    final shouldClose = await ConfirmationModal.show(
+                      context,
+                      title: 'Cancelar',
+                      confirmText: 'Cancelar',
+                      cancelText: 'Continuar',
+                    );
+                    
+                    if (shouldClose == true) {
+                      Navigator.pop(context);
+                    }
                   },
                   child: Container(
                     width: 30,
