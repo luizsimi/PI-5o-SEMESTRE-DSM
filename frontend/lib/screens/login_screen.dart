@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../components/custom_text_field.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -25,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/logo.png'),
+            image: AssetImage('assets/images/Background.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -38,55 +39,25 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // Logo
-                    Container(
-                      width: 120,
-                      height: 120,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.black,
-                      ),
-                      child: Center(
-                        child: Image.asset(
-                          'assets/images/logo.png',
-                          width: 100,
-                          height: 100,
-                        ),
-                      ),
+                    Image.asset(
+                      'assets/images/logo.png',
+                      width: 200,
+                      height: 200,
                     ),
                     const SizedBox(height: 40),
                     
                     // Username field
-                    TextField(
+                    CustomTextField(
+                      label: 'Usuário',
                       controller: _usernameController,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: const InputDecoration(
-                        hintText: 'Usuário',
-                        hintStyle: TextStyle(color: Color.fromARGB(179, 255, 255, 255)),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                        ),
-                      ),
                     ),
                     const SizedBox(height: 20),
                     
                     // Password field
-                    TextField(
+                    CustomTextField(
+                      label: 'Senha',
                       controller: _passwordController,
                       obscureText: true,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: const InputDecoration(
-                        hintText: 'Senha',
-                        hintStyle: TextStyle(color: Colors.white70),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                        ),
-                      ),
                     ),
                     const SizedBox(height: 40),
                     
