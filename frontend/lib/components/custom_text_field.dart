@@ -32,7 +32,8 @@ class CustomTextField extends StatelessWidget {
           obscureText: obscureText,
           keyboardType: keyboardType,
           onChanged: onChanged,
-          maxLines: maxLines,
+          // Corrigindo o erro: campos obscuros não podem ser multiline
+          maxLines: obscureText ? 1 : maxLines,
           enabled: enabled,
           decoration: InputDecoration(
             hintText: label,
