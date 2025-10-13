@@ -108,7 +108,7 @@ class _SearchScreenState extends State<SearchScreen> {
       backgroundColor: Colors.white,
       appBar: const CustomAppBar(
         title: 'PESQUISAR',
-        showBackButton: true,
+        showBackButton: false,
         showLogo: true,
       ),
       body: Column(
