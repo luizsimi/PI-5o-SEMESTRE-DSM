@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../components/custom_text_field.dart';
 import '../components/confirmation_modal.dart';
+import '../components/success_modal.dart';
 
 class BudgetModal extends StatefulWidget {
   const BudgetModal({super.key});
@@ -293,7 +294,7 @@ class _BudgetModalState extends State<BudgetModal> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (_selectedServiceType == 'DADOS') {
                           setState(() {
                             _selectedServiceType = 'PEÇAS';
@@ -303,14 +304,12 @@ class _BudgetModalState extends State<BudgetModal> {
                             _selectedServiceType = 'SERVIÇOS';
                           });
                         } else {
-                          // Salvar orçamento e fechar modal
-                          Navigator.pop(context);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Orçamento salvo com sucesso!'),
-                              backgroundColor: Colors.green,
-                            ),
+                          // Salvar orçamento e mostrar modal de sucesso
+                          await SuccessModal.show(
+                            context,
+                            title: 'Orçamento Realizado',
                           );
+                          Navigator.pop(context);
                         }
                       },
                       style: ElevatedButton.styleFrom(
