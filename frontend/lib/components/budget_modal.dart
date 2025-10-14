@@ -384,40 +384,43 @@ class _BudgetModalState extends State<BudgetModal> {
                   ),
                   
                   // Botão Próximo
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (_selectedServiceType == 'DADOS') {
-                          setState(() {
-                            _selectedServiceType = 'PEÇAS';
-                          });
-                        } else if (_selectedServiceType == 'PEÇAS') {
-                          setState(() {
-                            _selectedServiceType = 'SERVIÇOS';
-                          });
-                        } else {
-                          // Salvar orçamento e mostrar modal de sucesso
-                          await SuccessModal.show(
-                            context,
-                            title: 'Orçamento Realizado',
-                          );
-                          Navigator.pop(context);
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF000000),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 26),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          if (_selectedServiceType == 'DADOS') {
+                            setState(() {
+                              _selectedServiceType = 'PEÇAS';
+                            });
+                          } else if (_selectedServiceType == 'PEÇAS') {
+                            setState(() {
+                              _selectedServiceType = 'SERVIÇOS';
+                            });
+                          } else {
+                            // Salvar orçamento e mostrar modal de sucesso
+                            await SuccessModal.show(
+                              context,
+                              title: 'Orçamento Realizado',
+                            );
+                            Navigator.pop(context);
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF000000),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
                         ),
-                      ),
-                      child: Text(
-                        _selectedServiceType == 'SERVIÇOS' ? 'Salvar' : 'Próximo',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                        child: Text(
+                          _selectedServiceType == 'SERVIÇOS' ? 'Salvar' : 'Próximo',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),
