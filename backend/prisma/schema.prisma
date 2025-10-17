@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -15,22 +14,21 @@ datasource db {
 }
 
 model Store {
-  id        Int    @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   name      String
   imagePath String?
   users     User[] 
 }
 
 model User {
-  id          Int    @id @default(autoincrement())
-  firstName   String
-  lastName    String
-  email       String @unique
-  password    String
-  phoneNumber String?
-  cpf         String @unique
-  storeId     Int
-  store       Store  @relation(fields: [storeId], references: [id])
+  id           Int      @id @default(autoincrement())
+  firstName    String
+  lastName     String
+  email        String   @unique
+  password     String
+  phoneNumber  String?
+  cpf          String   @unique
+  refreshToken String?  
+  storeId      Int
+  store        Store    @relation(fields: [storeId], references: [id])
 }
-
-
