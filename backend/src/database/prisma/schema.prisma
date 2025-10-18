@@ -10,25 +10,25 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env()
 }
 
 model Store {
   id        Int     @id @default(autoincrement())
   name      String
   imagePath String?
-  users     User[] 
+  users     User[]
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
+  id           Int     @id @default(autoincrement())
   firstName    String
   lastName     String
-  email        String   @unique
+  email        String  @unique
   password     String
   phoneNumber  String?
-  cpf          String   @unique
-  refreshToken String?  
+  cpf          String  @unique
+  refreshToken String?
   storeId      Int
-  store        Store    @relation(fields: [storeId], references: [id])
+  store        Store   @relation(fields: [storeId], references: [id])
 }

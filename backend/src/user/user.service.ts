@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '../database/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(private prisma: PrismaService) {}
 
   async findByEmail(email: string) {
@@ -21,7 +21,7 @@ export class UsersService {
   }
 
   async updateRefreshToken(userId: number, refreshToken: string | null) {
-    const hashedRefreshToken = refreshToken
+    const hashedRefreshToken: string | null = refreshToken
       ? await bcrypt.hash(refreshToken, 10)
       : null;
 
@@ -30,5 +30,4 @@ export class UsersService {
       data: { refreshToken: hashedRefreshToken },
     });
   }
-
 }
