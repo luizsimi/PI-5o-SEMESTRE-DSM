@@ -1,12 +1,10 @@
-// src/orcamento/orcamento.module.ts
 import { Module } from '@nestjs/common';
 import { OrcamentoService } from './orcamento.service';
 import { OrcamentoController } from './orcamento.controller';
-import { PrismaModule } from '../database/prisma/prisma.module';
+import { PrismaService } from '../database/prisma/prisma.service';
 
 @Module({
-  imports: [PrismaModule],       
-  providers: [OrcamentoService],
-  controllers: [OrcamentoController], 
+  providers: [OrcamentoService, PrismaService],
+  controllers: [OrcamentoController],
 })
 export class OrcamentoModule {}

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../database/prisma/prisma.service';
-import type { Orcamento } from '../../generated/prisma/client';  
+import type { Orcamento } from '../../generated/prisma/client';
 
 @Injectable()
 export class OrcamentoService {
@@ -48,4 +48,4 @@ export class OrcamentoService {
   async remove(id: number): Promise<Orcamento> {
     return this.prisma.orcamento.delete({ where: { id } });
   }
-}{}
+}
