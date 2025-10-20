@@ -32,3 +32,31 @@ model User {
   storeId      Int
   store        Store   @relation(fields: [storeId], references: [id])
 }
+
+model Cliente{
+  id           Int     @id @default(autoincrement())
+  clienteId    Int
+  nome         String
+  cpf          String @unique
+  orcamentos   Orcamento[]
+}
+
+model OrcamentoItens{
+  id            Int     @id @default(autoincrement())
+  servico       String
+  pecas         String
+  itensId       Int
+  orcamentos    Orcamento[]
+  
+} 
+
+model Orcamento {
+   id            Int     @id @default(autoincrement())
+   placa         String
+   modelo        String
+   status        String
+   classificacao String
+   cliente       Cliente          @relation(fields: [clienteId], references: [id])
+   orcamentoItem OrcamentoItens   @relation(fields: [itensId], references: [id])
+}
+
