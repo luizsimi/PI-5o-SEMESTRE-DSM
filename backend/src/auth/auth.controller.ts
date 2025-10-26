@@ -13,7 +13,7 @@ import { AuthService } from './auth.service';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { IsEmail, IsNotEmpty } from 'class-validator';
-import { User } from '@prisma/client';
+import { User } from '../database/prisma/';
 
 export class LoginDto {
   @IsEmail()

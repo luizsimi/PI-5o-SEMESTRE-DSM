@@ -1,7 +1,19 @@
-import { Controller, Get, Post, Param, Body, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  Put,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { OrcamentoService } from './orcamento.service';
-import type { Orcamento } from '../../generated/prisma/client';
+import type { Orcamento } from '../database/prisma';
+import { Status } from '../database/prisma';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard) 
 @Controller('orcamentos')
 export class OrcamentoController {
   constructor(private readonly orcamentoService: OrcamentoService) {}
@@ -9,14 +21,10 @@ export class OrcamentoController {
   @Post()
   async create(@Body() data: {
     clienteId: number;
+    orcamentoItemId: number;
     placa: string;
     modelo: string;
-    status: string;
-    classificacao: string;
-    pecaDescricao: string;
-    pecaValor: number;
-    servicoDescricao: string;
-    servicoValor: number;
+    status: Status;
   }): Promise<Orcamento> {
     return this.orcamentoService.create(data);
   }
@@ -36,14 +44,10 @@ export class OrcamentoController {
     @Param('id') id: string,
     @Body() data: Partial<{
       clienteId: number;
+      orcamentoItemId: number;
       placa: string;
       modelo: string;
-      status: string;
-      classificacao: string;
-      pecaDescricao: string;
-      pecaValor: number;
-      servicoDescricao: string;
-      servicoValor: number;
+      status: Status;
     }>,
   ): Promise<Orcamento> {
     return this.orcamentoService.update(Number(id), data);

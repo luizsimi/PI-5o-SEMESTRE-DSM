@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../database/prisma/prisma.service';
-import type { Orcamento } from '../../generated/prisma/client';
+import type { Orcamento } from '../database/prisma';
 
 @Injectable()
 export class OrcamentoService {
@@ -8,38 +8,40 @@ export class OrcamentoService {
 
   async create(data: {
     clienteId: number;
+    orcamentoItemId: number;
     placa: string;
     modelo: string;
-    status: string;
-    classificacao: string;
-    pecaDescricao: string;
-    pecaValor: number;
-    servicoDescricao: string;
-    servicoValor: number;
+    status:
+      | 'AGUARDANDO'
+      | 'EM_MANUTENCAO'
+      | 'REJEITADO'
+      | 'FINALIZADO'
+      | 'CANCELADO';
   }): Promise<Orcamento> {
     return this.prisma.orcamento.create({ data });
   }
 
   async findAll(): Promise<Orcamento[]> {
-    return this.prisma.orcamento.findMany({ include: { cliente: true } });
+    return this.prisma.orcamento.findMany({ include: { cliente: true, orcamentoItem: true } });
   }
 
   async findOne(id: number): Promise<Orcamento | null> {
-    return this.prisma.orcamento.findUnique({ where: { id }, include: { cliente: true } });
+    return this.prisma.orcamento.findUnique({ where: { id }, include: { cliente: true, orcamentoItem: true } });
   }
 
   async update(
     id: number,
     data: Partial<{
       clienteId: number;
+      orcamentoItemId: number;
       placa: string;
       modelo: string;
-      status: string;
-      classificacao: string;
-      pecaDescricao: string;
-      pecaValor: number;
-      servicoDescricao: string;
-      servicoValor: number;
+      status:
+        | 'AGUARDANDO'
+        | 'EM_MANUTENCAO'
+        | 'REJEITADO'
+        | 'FINALIZADO'
+        | 'CANCELADO';
     }>
   ): Promise<Orcamento> {
     return this.prisma.orcamento.update({ where: { id }, data });

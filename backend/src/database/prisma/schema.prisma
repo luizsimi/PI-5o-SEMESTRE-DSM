@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env()
+  url      = env("DATABASE_URL")
 }
 
 model Store {
@@ -28,7 +28,47 @@ model User {
   password     String
   phoneNumber  String?
   cpf          String  @unique
-  refreshToken String?
   storeId      Int
+  refreshToken String?
   store        Store   @relation(fields: [storeId], references: [id])
+}
+
+model Cliente {
+  id         Int         @id @default(autoincrement())
+  nome       String
+  cpf        String      @unique
+  telefone   String
+  orcamentos Orcamento[]
+}
+
+model OrcamentoItem {
+  id             Int           @id @default(autoincrement())
+  tipoOrcamento  TipoOrcamento
+  orcamentoValor Float
+  orcamentos     Orcamento[]
+}
+
+enum TipoOrcamento {
+  SERVICO
+  PECA
+}
+
+model Orcamento {
+  id              Int           @id @default(autoincrement())
+  clienteId       Int
+  orcamentoItemId Int
+  placa           String
+  modelo          String
+  status          Status // Formatei usando Enum aleluia amem
+  dataCriacao     DateTime      @default(now())
+  cliente         Cliente       @relation(fields: [clienteId], references: [id])
+  orcamentoItem   OrcamentoItem @relation(fields: [orcamentoItemId], references: [id])
+}
+
+enum Status {
+  AGUARDANDO
+  EM_MANUTENCAO
+  REJEITADO
+  FINALIZADO
+  CANCELADO
 }
