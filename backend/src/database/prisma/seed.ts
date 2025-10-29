@@ -1,12 +1,16 @@
+import * as dotenv from 'dotenv';
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+
+// Carregar variáveis de ambiente do arquivo .env
+dotenv.config();
 
 const prisma = new PrismaClient();
 
 async function main() {
   // data cleanup
-  await prisma.user.deleteMany();
-  await prisma.store.deleteMany();
+  // await prisma.user.deleteMany();
+  // await prisma.store.deleteMany();
 
   //create a store
   const store = await prisma.store.create({
