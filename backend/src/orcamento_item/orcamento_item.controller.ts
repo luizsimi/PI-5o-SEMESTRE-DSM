@@ -9,8 +9,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { OrcamentoItemService } from './orcamento_item.service';
-import type { OrcamentoItem, TipoOrcamento } from '../database/prisma/';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { TipoOrcamento, OrcamentoItem } from '@prisma/client';
 
 @Controller('orcamento-items')
 export class OrcamentoItemController {
