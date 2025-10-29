@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../database/prisma/prisma.service';
-import type { OrcamentoItem, TipoOrcamento } from '../database/prisma/';
+import { OrcamentoItem, TipoOrcamento } from '@prisma/client';
 
 @Injectable()
 export class OrcamentoItemService {

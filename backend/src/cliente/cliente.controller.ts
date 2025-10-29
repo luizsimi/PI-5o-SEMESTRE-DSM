@@ -9,8 +9,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ClienteService } from './cliente.service';
-import type { Cliente } from '../database/prisma';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { Cliente } from '@prisma/client';
 
 @UseGuards(JwtAuthGuard) // protege todos os endpoints
 @Controller('clientes')
