@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import '../components/custom_app_bar.dart';
 import '../components/custom_bottom_navigation.dart';
 import '../components/service_card.dart';
-import '../components/service_details_modal.dart';
-import '../components/budget_modal.dart';
+import '../theme/colors.dart';
 import 'meus_dados_screen.dart';
 import 'search_screen.dart';
+import 'service_details_screen.dart';
+import 'budget_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -78,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: AppColors.secondary,
       appBar: const CustomAppBar(
         title: 'SERVIÇOS',
         showBackButton: false,
@@ -90,47 +91,44 @@ class _HomeScreenState extends State<HomeScreen> {
             width: double.infinity,
             height: 50,
             decoration: const BoxDecoration(
-              color: Color(0xFF000000),
+              color: AppColors.primary,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(12),
                 bottomRight: Radius.circular(12),
               ),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: _tabs.asMap().entries.map((entry) {
-                  int index = entry.key;
-                  String tab = entry.value;
-                  bool isSelected = _selectedTabIndex == index;
-                  
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _selectedTabIndex = index;
-                      });
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.only(right: 24),
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: isSelected ? Colors.white.withOpacity(0.15) : Colors.transparent,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        tab,
-                        style: TextStyle(
-                          color: isSelected ? Colors.white : Colors.white.withOpacity(0.7),
-                          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                          fontSize: 12,
-                          letterSpacing: 0.5,
-                        ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: _tabs.asMap().entries.map((entry) {
+                int index = entry.key;
+                String tab = entry.value;
+                bool isSelected = _selectedTabIndex == index;
+                
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _selectedTabIndex = index;
+                    });
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: isSelected ? Colors.white.withOpacity(0.15) : Colors.transparent,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      tab,
+                      style: TextStyle(
+                        color: isSelected ? Colors.white : Colors.white.withOpacity(0.7),
+                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                        fontSize: 12,
+                        letterSpacing: 0.5,
                       ),
                     ),
-                  );
-                }).toList(),
-              ),
+                  ),
+                );
+              }).toList(),
             ),
           ),
           
@@ -149,12 +147,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   status: service['status'],
                   statusColor: service['statusColor'],
                   onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (BuildContext context) {
-                        return ServiceDetailsModal(
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ServiceDetailsScreen(
                           id: service['id'],
                           title: service['title'],
                           clientName: service['subtitle'],
@@ -165,8 +161,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           partValue: service['partValue'],
                           serviceType: service['serviceType'],
                           serviceValue: service['serviceValue'],
-                        );
-                      },
+                        ),
+                      ),
                     );
                   },
                 );
@@ -192,15 +188,10 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
           
-          // Navegação para o modal de orçamento quando clicar no botão +
           if (index == 2) {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              builder: (BuildContext context) {
-                return const BudgetModal();
-              },
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const BudgetScreen()),
             );
           }
           
