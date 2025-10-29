@@ -192,6 +192,29 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                     ),
+                    const SizedBox(height: 12),
+                    OutlinedButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const HomeScreen(),
+                          ),
+                        );
+                      },
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: AppColors.white, width: 1.5),
+                        foregroundColor: AppColors.white,
+                        minimumSize: const Size(double.infinity, 48),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: const Text(
+                        'Entrar (teste sem login)',
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                      ),
+                    ),
                   ],
                 ),
               ),
