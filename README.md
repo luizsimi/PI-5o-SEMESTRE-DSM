@@ -65,7 +65,7 @@ O **RBS App** é uma solução completa para gestão de serviços, permitindo o 
 - **Custom Components** - Componentes personalizados reutilizáveis
 - **State Management** - Gerenciamento de estado eficiente
 - **Navigation** - Sistema de navegação intuitivo
-
+for
 ### 🖥️ Backend (NestJS)
 - **NestJS** - Framework Node.js escalável e modular
 - **TypeORM** - ORM robusto para banco de dados
