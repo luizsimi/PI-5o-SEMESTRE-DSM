@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import '../components/custom_app_bar.dart';
 import '../components/custom_bottom_navigation.dart';
+import '../theme/colors.dart';
 import '../components/custom_text_field.dart';
-import '../components/budget_modal.dart';
 import '../components/stat_card.dart';
 import 'home_screen.dart';
 import 'search_screen.dart';
+import 'budget_screen.dart';
 
 class MeusDadosScreen extends StatefulWidget {
   const MeusDadosScreen({super.key});
@@ -20,7 +21,7 @@ class _MeusDadosScreenState extends State<MeusDadosScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: AppColors.secondary,
       appBar: const CustomAppBar(
         title: 'MEUS DADOS',
         showBackButton: false,
@@ -180,15 +181,10 @@ class _MeusDadosScreenState extends State<MeusDadosScreen> {
             );
           }
           
-          // Navegação para o modal de orçamento quando clicar no botão +
           if (index == 2) {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              builder: (BuildContext context) {
-                return const BudgetModal();
-              },
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const BudgetScreen()),
             );
           }
           
@@ -245,7 +241,7 @@ class _MeusDadosScreenState extends State<MeusDadosScreen> {
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
                 decoration: const BoxDecoration(
-                  color: Color(0xFF000000),
+                  color: AppColors.primary,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20),
@@ -345,7 +341,7 @@ class _MeusDadosScreenState extends State<MeusDadosScreen> {
                              Navigator.pop(context);
                            },
                            style: ElevatedButton.styleFrom(
-                             backgroundColor: const Color(0xFF000000),
+                             backgroundColor: AppColors.primary,
                              padding: const EdgeInsets.symmetric(vertical: 16),
                              shape: RoundedRectangleBorder(
                                borderRadius: BorderRadius.circular(25),
