@@ -111,7 +111,6 @@ class _SearchScreenState extends State<SearchScreen> {
       appBar: const CustomAppBar(
         title: 'PESQUISAR',
         showBackButton: false,
-        showLogo: true,
       ),
       body: Column(
         children: [
@@ -319,6 +318,14 @@ class _SearchScreenState extends State<SearchScreen> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const GanhosScreen()),
+            );
+          }
+          
+          // Navegar para Meus Dados ao clicar no ícone de perfil (index 4)
+          if (index == 4) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const MeusDadosScreen()),
             );
           }
         },

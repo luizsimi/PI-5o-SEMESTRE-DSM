@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../components/custom_app_bar.dart';
 import '../components/custom_bottom_navigation.dart';
-import '../components/stat_card.dart';
 import '../components/service_card.dart';
 import '../theme/colors.dart';
 import 'home_screen.dart';

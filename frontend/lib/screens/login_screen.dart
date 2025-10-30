@@ -12,7 +12,7 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStateMixin {
+class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -26,11 +26,15 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   
   AnimationController? _shakeController;
   Animation<double>? _shakeAnimation;
+  
+  AnimationController? _carController;
+  Animation<double>? _carAnimation;
 
   @override
   void initState() {
     super.initState();
     _setupShakeAnimation();
+    _setupCarAnimation();
     _loadRememberMe();
     
     // Auto-focus no email após build
@@ -48,6 +52,17 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     _shakeAnimation = Tween<double>(begin: 0, end: 10)
       .chain(CurveTween(curve: Curves.elasticIn))
       .animate(_shakeController!);
+  }
+  
+  void _setupCarAnimation() {
+    _carController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    )..repeat(reverse: true);
+    
+    _carAnimation = Tween<double>(begin: -30, end: 30)
+      .chain(CurveTween(curve: Curves.easeInOut))
+      .animate(_carController!);
   }
 
   Future<void> _loadRememberMe() async {
@@ -90,6 +105,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     _emailFocus.dispose();
     _passwordFocus.dispose();
     _shakeController?.dispose();
+    _carController?.dispose();
     super.dispose();
   }
 
@@ -704,33 +720,64 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
             ),
           ),
           
-          // Loading overlay
+          // Loading overlay com animação de carro
           if (_isLoading)
             Container(
-              color: Colors.black.withOpacity(0.3),
-              child: const Center(
+              color: Colors.black.withOpacity(0.5),
+              child: Center(
                 child: Card(
-                  margin: EdgeInsets.all(40),
+                  elevation: 8,
+                  margin: const EdgeInsets.all(40),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
                   child: Padding(
-                    padding: EdgeInsets.all(32),
+                    padding: const EdgeInsets.all(32),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        CircularProgressIndicator(),
-                        SizedBox(height: 20),
-                        Text(
+                        // Animação de carro
+                        AnimatedBuilder(
+                          animation: _carAnimation ?? const AlwaysStoppedAnimation(0),
+                          builder: (context, child) {
+                            return Transform.translate(
+                              offset: Offset(_carAnimation?.value ?? 0, 0),
+                              child: const Icon(
+                                Icons.directions_car,
+                                size: 60,
+                                color: AppColors.primary,
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 24),
+                        // Indicador de progresso linear
+                        SizedBox(
+                          width: 200,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: const LinearProgressIndicator(
+                              backgroundColor: Color(0xFFE0E0E0),
+                              valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                              minHeight: 4,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        const Text(
                           'Autenticando...',
                           style: TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.textPrimary,
                           ),
                         ),
                       ],
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
         ],
       ),
     );
