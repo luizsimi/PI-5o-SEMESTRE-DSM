@@ -203,6 +203,14 @@ class _HomeScreenState extends State<HomeScreen> {
               MaterialPageRoute(builder: (context) => const GanhosScreen()),
             );
           }
+          
+          // Navegar para Meus Dados ao clicar no ícone de perfil (index 4)
+          if (index == 4) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const MeusDadosScreen()),
+            );
+          }
         },
       ),
     );

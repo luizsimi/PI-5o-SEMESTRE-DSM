@@ -6,6 +6,7 @@ import '../components/custom_text_field.dart';
 import '../components/stat_card.dart';
 import 'home_screen.dart';
 import 'search_screen.dart';
+import 'ganhos_screen.dart';
 import 'budget_screen.dart';
 import 'login_screen.dart';
 
@@ -17,7 +18,7 @@ class MeusDadosScreen extends StatefulWidget {
 }
 
 class _MeusDadosScreenState extends State<MeusDadosScreen> {
-  int _selectedBottomIndex = 3; // Perfil selecionado
+  int _selectedBottomIndex = 4; // Perfil selecionado (ícone de pessoa)
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,6 @@ class _MeusDadosScreenState extends State<MeusDadosScreen> {
       appBar: const CustomAppBar(
         title: 'MEUS DADOS',
         showBackButton: false,
-        showLogo: true,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -260,34 +260,17 @@ class _MeusDadosScreenState extends State<MeusDadosScreen> {
             );
           }
           
-          // Navegação direta - Meus Dados (index 3) já está na tela atual
+          // Navegar para Meus Ganhos ao clicar no ícone de $ (index 3)
+          if (index == 3) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const GanhosScreen()),
+            );
+          }
+          
+          // Navegação direta - Meus Dados (index 4) já está na tela atual
         },
       ),
-    );
-  }
-
-  Widget _buildStatCard(String value, String label) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey[600],
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
     );
   }
 
@@ -405,30 +388,30 @@ class _MeusDadosScreenState extends State<MeusDadosScreen> {
                          ),
                        ),
                        
-                       // Botão Salvar
-                       SizedBox(
-                         width: double.infinity,
-                         child: ElevatedButton(
-                           onPressed: () {
-                             Navigator.pop(context);
-                           },
-                           style: ElevatedButton.styleFrom(
-                             backgroundColor: AppColors.primary,
-                             padding: const EdgeInsets.symmetric(vertical: 16),
-                             shape: RoundedRectangleBorder(
-                               borderRadius: BorderRadius.circular(25),
-                             ),
-                           ),
-                           child: const Text(
-                             'Salvar',
-                             style: TextStyle(
-                               color: Colors.white,
-                               fontSize: 16,
-                               fontWeight: FontWeight.w600,
-                             ),
-                           ),
-                         ),
-                       ),
+                      // Botão Salvar
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                          ),
+                          child: const Text(
+                            'Salvar',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
                      ],
                    ),
                  ),
