@@ -45,11 +45,11 @@ class CustomBottomNavigation extends StatelessWidget {
           label: '',
         ),
         const BottomNavigationBarItem(
-          icon: Icon(Icons.person),
+          icon: Icon(Icons.attach_money),
           label: '',
         ),
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.attach_money),
+         const BottomNavigationBarItem(
+          icon: Icon(Icons.person),
           label: '',
         ),
       ],

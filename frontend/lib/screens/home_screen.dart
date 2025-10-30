@@ -4,6 +4,7 @@ import '../components/custom_bottom_navigation.dart';
 import '../components/service_card.dart';
 import '../theme/colors.dart';
 import 'meus_dados_screen.dart';
+import 'ganhos_screen.dart';
 import 'search_screen.dart';
 import 'service_details_screen.dart';
 import 'budget_screen.dart';
@@ -195,11 +196,11 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
           
-          // Navegação para Meus Dados quando clicar no ícone de perfil
+          // Navegar para Meus Ganhos ao clicar no ícone de $ (index 3)
           if (index == 3) {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const MeusDadosScreen()),
+              MaterialPageRoute(builder: (context) => const GanhosScreen()),
             );
           }
         },
