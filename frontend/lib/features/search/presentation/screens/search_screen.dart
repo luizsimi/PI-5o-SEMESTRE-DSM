@@ -76,43 +76,54 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.secondary,
       appBar: const CustomAppBar(
         title: 'PESQUISAR',
         showBackButton: false,
       ),
       body: Column(
         children: [
-          // Campo de pesquisa
+          // Header com campo de pesquisa integrado
           Container(
-            padding: const EdgeInsets.all(16),
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              color: AppColors.primary,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(12),
+                bottomRight: Radius.circular(12),
+              ),
+            ),
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
             child: TextField(
               controller: _searchController,
               onChanged: _filterVehicles,
+              style: const TextStyle(color: Colors.black87, fontSize: 14),
               decoration: InputDecoration(
                 hintText: 'Buscar placa, modelo ou proprietário',
-                hintStyle: const TextStyle(fontSize: 14),
-                prefixIcon: const Icon(Icons.search, color: Colors.grey, size: 22),
+                hintStyle: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                prefixIcon: Icon(Icons.search, color: Colors.grey[700], size: 22),
                 suffixIcon: _searchController.text.isNotEmpty
                     ? IconButton(
-                        icon: const Icon(Icons.clear, color: Colors.grey, size: 20),
+                        icon: Icon(Icons.clear, color: Colors.grey[700], size: 20),
                         onPressed: () {
                           _searchController.clear();
                           _filterVehicles('');
                         },
                       )
                     : null,
+                filled: true,
+                fillColor: Colors.white,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.grey.shade300),
+                  borderSide: BorderSide.none,
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.grey.shade300),
+                  borderSide: BorderSide.none,
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: AppColors.primary, width: 2),
+                  borderSide: const BorderSide(color: Colors.white, width: 2),
                 ),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               ),

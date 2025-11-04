@@ -16,7 +16,10 @@ class GanhosScreen extends StatefulWidget {
 
 class _GanhosScreenState extends State<GanhosScreen> {
   int _selectedBottomIndex = 2;
-  String _selectedFilter = 'DIA';
+  String _selectedFilter = 'MÊS'; // Começa com MÊS (mais útil para mecânico)
+  
+  // Meta mensal do mecânico (pode ser configurável depois)
+  final double _metaMensal = 5000.0;
 
   final List<Map<String, dynamic>> _finishedServices = [
     {
@@ -128,74 +131,123 @@ class _GanhosScreenState extends State<GanhosScreen> {
               }).toList(),
             ),
           ),
+          // Card Principal com Total e Métricas
           Padding(
             padding: const EdgeInsets.all(16),
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.08),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  )
-                ],
-              ),
-              child: Builder(
-                builder: (_) {
-                  String label;
-                  double total;
-                  if (_selectedFilter == 'DIA') {
-                    label = 'Hoje';
-                    total = totalDia;
-                  } else if (_selectedFilter == 'MÊS') {
-                    label = 'Neste mês';
-                    total = totalMes;
-                  } else {
-                    label = 'Neste ano';
-                    total = totalAno;
-                  }
-                  final int qtdServicos = _filteredServices.length;
+            child: Column(
+              children: [
+                // Card do Total
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF2E7D32), Color(0xFF388E3C)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.green.withOpacity(0.3),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
+                      )
+                    ],
+                  ),
+                  child: Builder(
+                    builder: (_) {
+                      String label;
+                      double total;
+                      if (_selectedFilter == 'DIA') {
+                        label = 'Ganhos de Hoje';
+                        total = totalDia;
+                      } else if (_selectedFilter == 'MÊS') {
+                        label = 'Ganhos do Mês';
+                        total = totalMes;
+                      } else {
+                        label = 'Ganhos do Ano';
+                        total = totalAno;
+                      }
+                      final int qtdServicos = _filteredServices.length;
+                      final double ticketMedio = qtdServicos > 0 ? total / qtdServicos : 0;
 
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'R\$${total.toStringAsFixed(2)}',
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.success,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Row(
+                            children: [
+                              const Icon(Icons.attach_money, color: Colors.white, size: 28),
+                              const SizedBox(width: 8),
+                              Text(
+                                label,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white70,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
                           Text(
-                            label,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[600],
-                              fontWeight: FontWeight.w500,
+                            'R\$ ${total.toStringAsFixed(2)}',
+                            style: const TextStyle(
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              letterSpacing: 0.5,
                             ),
                           ),
-                          Text(
-                            '$qtdServicos serviços',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[600],
-                              fontWeight: FontWeight.w600,
-                            ),
+                          const SizedBox(height: 16),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              _buildInfoChip(
+                                icon: Icons.build,
+                                label: '$qtdServicos serviços',
+                              ),
+                              _buildInfoChip(
+                                icon: Icons.trending_up,
+                                label: 'Média R\$ ${ticketMedio.toStringAsFixed(2)}',
+                              ),
+                            ],
                           ),
                         ],
+                      );
+                    },
+                  ),
+                ),
+                
+                // Meta Mensal (apenas quando filtro é MÊS)
+                if (_selectedFilter == 'MÊS') ...[
+                  const SizedBox(height: 16),
+                  _buildMetaCard(totalMes),
+                ],
+                
+                // Cards de Estatísticas Rápidas
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildStatCard(
+                        icon: Icons.star,
+                        title: 'Melhor Cliente',
+                        value: _getMelhorCliente(),
+                        color: Colors.amber,
                       ),
-                    ],
-                  );
-                },
-              ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _buildStatCard(
+                        icon: Icons.calendar_today,
+                        title: 'Melhor Dia',
+                        value: _getMelhorDia(),
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
           Expanded(
@@ -234,6 +286,258 @@ class _GanhosScreenState extends State<GanhosScreen> {
         },
       ),
     );
+  }
+
+  // Widget para chips de informação no card principal
+  Widget _buildInfoChip({required IconData icon, required String label}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: Colors.white, size: 16),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Widget do card de meta mensal
+  Widget _buildMetaCard(double totalMes) {
+    final progresso = (totalMes / _metaMensal).clamp(0.0, 1.0);
+    final porcentagem = (progresso * 100).toInt();
+    final faltam = _metaMensal - totalMes;
+    final atingiuMeta = totalMes >= _metaMensal;
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: atingiuMeta ? Colors.green : Colors.grey.shade300,
+          width: 2,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.08),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          )
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    atingiuMeta ? Icons.emoji_events : Icons.flag,
+                    color: atingiuMeta ? Colors.amber : Colors.grey[600],
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Meta do Mês',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey[800],
+                    ),
+                  ),
+                ],
+              ),
+              Text(
+                'R\$ ${_metaMensal.toStringAsFixed(2)}',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: LinearProgressIndicator(
+              value: progresso,
+              backgroundColor: Colors.grey[200],
+              valueColor: AlwaysStoppedAnimation<Color>(
+                atingiuMeta ? Colors.green : Colors.blue,
+              ),
+              minHeight: 8,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                atingiuMeta
+                    ? '🎉 Meta atingida!'
+                    : 'Faltam R\$ ${faltam.toStringAsFixed(2)}',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: atingiuMeta ? Colors.green : Colors.grey[600],
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              Text(
+                '$porcentagem%',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: atingiuMeta ? Colors.green : Colors.blue,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Widget de card de estatística
+  Widget _buildStatCard({
+    required IconData icon,
+    required String title,
+    required String value,
+    required Color color,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.08),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          )
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: color, size: 24),
+          const SizedBox(height: 8),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 11,
+              color: Colors.grey[600],
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Retorna o nome do melhor cliente (quem mais gastou)
+  String _getMelhorCliente() {
+    if (_filteredServices.isEmpty) return 'Nenhum';
+    
+    // Agrupar por cliente e somar valores
+    final Map<String, double> clienteValores = {};
+    for (var service in _filteredServices) {
+      final cliente = service['client'] as String;
+      final valor = service['value'] as double;
+      clienteValores[cliente] = (clienteValores[cliente] ?? 0) + valor;
+    }
+    
+    // Encontrar o cliente com maior valor
+    String melhorCliente = '';
+    double maiorValor = 0;
+    clienteValores.forEach((cliente, valor) {
+      if (valor > maiorValor) {
+        maiorValor = valor;
+        melhorCliente = cliente;
+      }
+    });
+    
+    // Retornar apenas o primeiro nome
+    return melhorCliente.split(' ').first;
+  }
+
+  // Retorna o melhor dia (dia com mais ganhos)
+  String _getMelhorDia() {
+    if (_filteredServices.isEmpty) return 'Nenhum';
+    
+    if (_selectedFilter == 'DIA') {
+      return 'Hoje';
+    } else if (_selectedFilter == 'MÊS') {
+      // Agrupar por dia do mês e somar valores
+      final Map<int, double> diaValores = {};
+      for (var service in _filteredServices) {
+        final date = service['date'] as DateTime;
+        final dia = date.day;
+        final valor = service['value'] as double;
+        diaValores[dia] = (diaValores[dia] ?? 0) + valor;
+      }
+      
+      // Encontrar o dia com maior valor
+      int melhorDia = 0;
+      double maiorValor = 0;
+      diaValores.forEach((dia, valor) {
+        if (valor > maiorValor) {
+          maiorValor = valor;
+          melhorDia = dia;
+        }
+      });
+      
+      return 'Dia $melhorDia';
+    } else {
+      // Para ANO, mostrar o mês
+      final Map<int, double> mesValores = {};
+      for (var service in _filteredServices) {
+        final date = service['date'] as DateTime;
+        final mes = date.month;
+        final valor = service['value'] as double;
+        mesValores[mes] = (mesValores[mes] ?? 0) + valor;
+      }
+      
+      int melhorMes = 0;
+      double maiorValor = 0;
+      mesValores.forEach((mes, valor) {
+        if (valor > maiorValor) {
+          maiorValor = valor;
+          melhorMes = mes;
+        }
+      });
+      
+      const meses = ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 
+                     'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+      return meses[melhorMes];
+    }
   }
 }
 
