@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'screens/login_screen.dart';
-import 'screens/home_screen.dart';
-import 'services/auth_service.dart';
-import 'theme/colors.dart';
+import 'features/auth/presentation/screens/login_screen.dart';
+import 'features/services/presentation/screens/home_screen.dart';
+import 'features/auth/data/auth_service.dart';
+import 'core/theme/colors.dart';
 
 void main() {
   runApp(const MyApp());

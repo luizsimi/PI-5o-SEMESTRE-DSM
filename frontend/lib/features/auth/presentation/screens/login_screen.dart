@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../services/auth_service.dart';
-import '../theme/colors.dart';
-import 'home_screen.dart';
+import '../../data/auth_service.dart';
+import '../../../../core/theme/colors.dart';
+import '../../../services/presentation/screens/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -26,15 +26,11 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
   
   AnimationController? _shakeController;
   Animation<double>? _shakeAnimation;
-  
-  AnimationController? _carController;
-  Animation<double>? _carAnimation;
 
   @override
   void initState() {
     super.initState();
     _setupShakeAnimation();
-    _setupCarAnimation();
     _loadRememberMe();
     
     // Auto-focus no email após build
@@ -52,17 +48,6 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
     _shakeAnimation = Tween<double>(begin: 0, end: 10)
       .chain(CurveTween(curve: Curves.elasticIn))
       .animate(_shakeController!);
-  }
-  
-  void _setupCarAnimation() {
-    _carController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1500),
-    )..repeat(reverse: true);
-    
-    _carAnimation = Tween<double>(begin: -30, end: 30)
-      .chain(CurveTween(curve: Curves.easeInOut))
-      .animate(_carController!);
   }
 
   Future<void> _loadRememberMe() async {
@@ -105,7 +90,6 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
     _emailFocus.dispose();
     _passwordFocus.dispose();
     _shakeController?.dispose();
-    _carController?.dispose();
     super.dispose();
   }
 
@@ -113,7 +97,13 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
     if (value == null || value.isEmpty) {
       return 'Por favor, digite seu email';
     }
-    if (!value.contains('@') || !value.contains('.')) {
+    
+    // Validação mais robusta de email usando regex
+    final emailRegex = RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+    );
+    
+    if (!emailRegex.hasMatch(value.trim())) {
       return 'Por favor, digite um email válido';
     }
     return null;
@@ -348,26 +338,65 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
+    // Obter dimensões da tela para responsividade
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    
+    // Padding responsivo: 8% da largura, mas entre 24px e 60px
+    final horizontalPadding = (screenWidth * 0.08).clamp(24.0, 60.0);
+    
+    // Tamanho da logo padronizado: 38% da largura, entre 180px e 280px
+    // Tamanho ideal para tela de login profissional
+    final logoSize = (screenWidth * 0.38).clamp(180.0, 280.0);
+    
+    // Padding vertical para melhor distribuição
+    final verticalPadding = screenHeight * 0.04;
+    
     return Scaffold(
       body: Stack(
         children: [
-          // Background image
+          // Background image com fallback color
           Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
+        decoration: BoxDecoration(
+          // Fallback: gradiente escuro suave
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              const Color(0xFF1A1A1A),
+              AppColors.primary,
+            ],
+          ),
+          image: const DecorationImage(
             image: AssetImage('assets/images/Background.png'),
             fit: BoxFit.cover,
           ),
         ),
           ),
           
+          // Overlay escuro sutil para melhorar contraste e legibilidade
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.black.withOpacity(0.3),
+                  Colors.black.withOpacity(0.5),
+                ],
+              ),
+            ),
+          ),
+          
           // Content
           SafeArea(
-          child: Center(
             child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
               child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 60),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: horizontalPadding,
+                    vertical: verticalPadding,
+                  ),
                   child: AnimatedBuilder(
                     animation: _shakeAnimation ?? const AlwaysStoppedAnimation(0),
                     builder: (context, child) {
@@ -379,21 +408,25 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                     child: Form(
                       key: _formKey,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                          // Logo com fade in
+                          // Logo com tamanho padronizado
                           Hero(
                             tag: 'logo',
                             child: Image.asset(
                       'assets/images/logo.png',
-                      width: 300,
-                      height: 300,
+                      width: logoSize,
+                      height: logoSize,
                             ),
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: screenHeight * 0.03), // Espaçamento balanceado entre logo e campos
                     
-                    // Email field
-                          Container(
+                    // Email field com acessibilidade
+                          Semantics(
+                            label: 'Campo de email',
+                            hint: 'Digite seu endereço de email para fazer login',
+                            textField: true,
+                            child: Container(
                             decoration: BoxDecoration(
                               color: Colors.white.withOpacity(0.9),
                               borderRadius: BorderRadius.circular(12),
@@ -472,9 +505,16 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                               },
                             ),
                           ),
+                          ),
                           const SizedBox(height: 20),
                     
-                    // Password field
+                    // Password field com acessibilidade
+                          Semantics(
+                            label: 'Campo de senha',
+                            hint: 'Digite sua senha',
+                            obscured: true,
+                            textField: true,
+                            child:
                           Container(
                             decoration: BoxDecoration(
                               color: Colors.white.withOpacity(0.9),
@@ -568,6 +608,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                               },
                             ),
                           ),
+                          ),
                           const SizedBox(height: 12),
                           
                           // Lembrar-me e Esqueci senha
@@ -600,11 +641,15 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                                               });
                                               HapticFeedback.selectionClick();
                                             },
-                                            activeColor: AppColors.white,
+                                            // Melhor contraste para acessibilidade
+                                            activeColor: Colors.white,
                                             checkColor: AppColors.primary,
-                                            side: const BorderSide(
-                                              color: AppColors.white,
+                                            side: BorderSide(
+                                              color: Colors.white.withOpacity(0.9),
                                               width: 2,
+                                            ),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(4),
                                             ),
                                           ),
                                         ),
@@ -644,10 +689,15 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                               ),
                             ],
                           ),
-                          const SizedBox(height: 20),
+                          SizedBox(height: screenHeight * 0.025), // Espaçamento responsivo
                           
-                          // Botão Entrar
-                    ElevatedButton(
+                          // Botão Entrar com acessibilidade
+                          Semantics(
+                            button: true,
+                            label: 'Botão Entrar',
+                            hint: 'Pressione para fazer login',
+                            enabled: !_isLoading,
+                            child: ElevatedButton(
                       onPressed: _isLoading ? null : _handleLogin,
                       style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
@@ -678,6 +728,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                               ),
                             ),
                     ),
+                          ),
                           
                           // Botão de teste - apenas em desenvolvimento
                           if (const bool.fromEnvironment('dart.vm.product') == false) ...[
@@ -711,6 +762,9 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                               ),
                             ),
                           ],
+                          
+                          // Espaçamento extra no final para balanço visual
+                          SizedBox(height: screenHeight * 0.03),
                         ],
                       ),
                     ),
@@ -718,49 +772,36 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                 ),
               ),
             ),
-          ),
           
-          // Loading overlay com animação de carro
+          // Loading overlay simplificado e menos intrusivo
           if (_isLoading)
             Container(
-              color: Colors.black.withOpacity(0.5),
+              color: Colors.black.withOpacity(0.3),
               child: Center(
                 child: Card(
                   elevation: 8,
-                  margin: const EdgeInsets.all(40),
+                  margin: EdgeInsets.symmetric(
+                    horizontal: horizontalPadding,
+                    vertical: 20,
+                  ),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(32),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 32,
+                      vertical: 24,
+                    ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        // Animação de carro
-                        AnimatedBuilder(
-                          animation: _carAnimation ?? const AlwaysStoppedAnimation(0),
-                          builder: (context, child) {
-                            return Transform.translate(
-                              offset: Offset(_carAnimation?.value ?? 0, 0),
-                              child: const Icon(
-                                Icons.directions_car,
-                                size: 60,
-                                color: AppColors.primary,
-                              ),
-                            );
-                          },
-                        ),
-                        const SizedBox(height: 24),
-                        // Indicador de progresso linear
-                        SizedBox(
-                          width: 200,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: const LinearProgressIndicator(
-                              backgroundColor: Color(0xFFE0E0E0),
-                              valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
-                              minHeight: 4,
-                            ),
+                        // Indicador circular com animação suave
+                        const SizedBox(
+                          width: 50,
+                          height: 50,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 3,
+                            valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
                           ),
                         ),
                         const SizedBox(height: 20),
@@ -770,6 +811,14 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                             color: AppColors.textPrimary,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Aguarde um momento',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: AppColors.textSecondary,
                           ),
                         ),
                       ],

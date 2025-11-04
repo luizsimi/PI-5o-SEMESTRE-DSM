@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../components/custom_app_bar.dart';
-import '../theme/colors.dart';
-import 'checkin_screen.dart';
+import '../../../../core/widgets/custom_app_bar.dart';
+import '../../../../core/theme/colors.dart';
+import '../../../checkin/presentation/screens/checkin_screen.dart';
 
 class ServiceDetailsScreen extends StatelessWidget {
   final String id;

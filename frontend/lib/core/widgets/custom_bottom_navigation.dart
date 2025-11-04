@@ -27,28 +27,11 @@ class CustomBottomNavigation extends StatelessWidget {
           icon: Icon(Icons.search),
           label: '',
         ),
-        BottomNavigationBarItem(
-          icon: Container(
-            width: 50,
-            height: 50,
-            decoration: const BoxDecoration(
-              color: Colors.black,
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.all(Radius.circular(25)),
-            ),
-            child: const Icon(
-              Icons.add,
-              color: Colors.white,
-              size: 24,
-            ),
-          ),
-          label: '',
-        ),
         const BottomNavigationBarItem(
           icon: Icon(Icons.attach_money),
           label: '',
         ),
-         const BottomNavigationBarItem(
+        const BottomNavigationBarItem(
           icon: Icon(Icons.person),
           label: '',
         ),
@@ -56,3 +39,4 @@ class CustomBottomNavigation extends StatelessWidget {
     );
   }
 }
+
