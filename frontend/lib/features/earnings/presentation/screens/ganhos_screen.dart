@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import '../components/custom_app_bar.dart';
-import '../components/custom_bottom_navigation.dart';
-import '../components/service_card.dart';
-import '../theme/colors.dart';
-import 'home_screen.dart';
-import 'search_screen.dart';
-import 'meus_dados_screen.dart';
-import 'budget_screen.dart';
+import '../../../../core/widgets/custom_app_bar.dart';
+import '../../../../core/widgets/custom_bottom_navigation.dart';
+import '../../../services/presentation/widgets/service_card.dart';
+import '../../../../core/theme/colors.dart';
+import '../../../services/presentation/screens/home_screen.dart';
+import '../../../search/presentation/screens/search_screen.dart';
+import '../../../profile/presentation/screens/meus_dados_screen.dart';
 
 class GanhosScreen extends StatefulWidget {
   const GanhosScreen({super.key});
@@ -16,7 +15,7 @@ class GanhosScreen extends StatefulWidget {
 }
 
 class _GanhosScreenState extends State<GanhosScreen> {
-  int _selectedBottomIndex = 3;
+  int _selectedBottomIndex = 2;
   String _selectedFilter = 'DIA';
 
   final List<Map<String, dynamic>> _finishedServices = [
@@ -228,10 +227,8 @@ class _GanhosScreenState extends State<GanhosScreen> {
           if (index == 1) {
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const SearchScreen()));
           }
-          if (index == 2) {
-            Navigator.push(context, MaterialPageRoute(builder: (_) => const BudgetScreen()));
-          }
-          if (index == 4) {
+          // index 2 é a tela atual (Ganhos)
+          if (index == 3) {
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const MeusDadosScreen()));
           }
         },

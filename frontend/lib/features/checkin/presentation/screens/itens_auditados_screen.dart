@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../components/custom_app_bar.dart';
-import '../theme/colors.dart';
+import '../../../../core/widgets/custom_app_bar.dart';
+import '../../../../core/theme/colors.dart';
 
 class ItensAuditadosScreen extends StatefulWidget {
   final String vehicleTitle;
@@ -278,4 +278,6 @@ class _ItensAuditadosScreenState extends State<ItensAuditadosScreen> {
     );
   }
 }
+
+
 

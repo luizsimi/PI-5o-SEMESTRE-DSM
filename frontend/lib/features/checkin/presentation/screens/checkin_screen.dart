@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import '../components/custom_app_bar.dart';
-import '../theme/colors.dart';
+import '../../../../core/widgets/custom_app_bar.dart';
+import '../../../../core/theme/colors.dart';
 import 'itens_auditados_screen.dart';
 
 class CheckinScreen extends StatefulWidget {

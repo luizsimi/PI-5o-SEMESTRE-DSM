@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import '../components/custom_app_bar.dart';
-import '../components/custom_bottom_navigation.dart';
-import '../components/service_card.dart';
-import '../theme/colors.dart';
-import 'meus_dados_screen.dart';
-import 'ganhos_screen.dart';
-import 'search_screen.dart';
+import '../../../../core/widgets/custom_app_bar.dart';
+import '../../../../core/widgets/custom_bottom_navigation.dart';
+import '../widgets/service_card.dart';
+import '../../../../core/theme/colors.dart';
+import '../../../profile/presentation/screens/meus_dados_screen.dart';
+import '../../../earnings/presentation/screens/ganhos_screen.dart';
+import '../../../search/presentation/screens/search_screen.dart';
 import 'service_details_screen.dart';
-import 'budget_screen.dart';
+import '../../../budget/presentation/screens/budget_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -172,6 +172,20 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const BudgetScreen()),
+          );
+        },
+        backgroundColor: AppColors.primary,
+        child: const Icon(
+          Icons.add,
+          color: AppColors.white,
+          size: 28,
+        ),
+      ),
       bottomNavigationBar: CustomBottomNavigation(
         currentIndex: _selectedBottomIndex,
         onTap: (index) {
@@ -189,23 +203,16 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
           
+          // Navegar para Meus Ganhos ao clicar no ícone de $ (index 2, antes era 3)
           if (index == 2) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const BudgetScreen()),
-            );
-          }
-          
-          // Navegar para Meus Ganhos ao clicar no ícone de $ (index 3)
-          if (index == 3) {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const GanhosScreen()),
             );
           }
           
-          // Navegar para Meus Dados ao clicar no ícone de perfil (index 4)
-          if (index == 4) {
+          // Navegar para Meus Dados ao clicar no ícone de perfil (index 3, antes era 4)
+          if (index == 3) {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const MeusDadosScreen()),
